@@ -24,6 +24,8 @@ public class UserRepositoryImpl implements UserRepository {
     private FindUsers findUsers;
     private CountExistedEnableUser countExistedEnableUser;
     private DeleteUser deleteUser;
+    private InsertBatchUsers insertBatchUsers;
+    private CheckExistingAccount checkExistingAccount;
 
     @Autowired
     public UserRepositoryImpl(DataSource dataSource) {
@@ -38,7 +40,8 @@ public class UserRepositoryImpl implements UserRepository {
         findUsers = new FindUsers(dataSource);
         countExistedEnableUser = new CountExistedEnableUser(dataSource);
         deleteUser = new DeleteUser(dataSource);
-
+        insertBatchUsers = new InsertBatchUsers(dataSource);
+        checkExistingAccount = new CheckExistingAccount(dataSource);
     }
 
     @Override
@@ -72,5 +75,15 @@ public class UserRepositoryImpl implements UserRepository {
         return deleteUser.executed(userCUD);
     }
 
+    @Override
+    public void insertBatch(List<UserCUD> importUsers) {
+        int [] result = insertBatchUsers.execute(importUsers);
+    }
+
+    @Override
+    public int validateExistingAccount(String checkString, boolean checkExistingUsername, boolean checkExistingPhone,
+            boolean checkExistingEmail) {
+        return checkExistingAccount.execute(checkString,checkExistingUsername,checkExistingPhone,checkExistingEmail);
+    }
 
 }

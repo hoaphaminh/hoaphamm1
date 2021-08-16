@@ -20,4 +20,8 @@ public interface UserRepository {
     int countExistedEnabledRecord(Long id);
 
     int deleteUser(UserCUD userCUD);
+
+    void insertBatch(List<UserCUD> importUsers);
+
+    int validateExistingAccount(String checkString, boolean checkExistingUsername, boolean checkExistingPhone, boolean checkExistingEmail);
 }

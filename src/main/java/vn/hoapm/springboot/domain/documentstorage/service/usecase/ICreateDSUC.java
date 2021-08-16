@@ -15,5 +15,5 @@ public interface ICreateDSUC {
 
     ICreateDSUC fail() throws CommonException;
 
-    long sendResult();
+    String sendResult();
 }

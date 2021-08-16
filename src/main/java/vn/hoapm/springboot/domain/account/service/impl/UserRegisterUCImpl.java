@@ -35,7 +35,12 @@ public class UserRegisterUCImpl implements IUserRegisterUC {
     }
 
     @Override
-    public IUserRegisterUC validate() {
+    public IUserRegisterUC validateExisting() throws CommonException {
+        //check existing username
+        int existingRecord = repository.validateExistingAccount(userCUD.getUsername(),true, false,false);
+        if (existingRecord >0 ){
+            throw new CommonException("Username is existed");
+        }
         return this;
     }
 

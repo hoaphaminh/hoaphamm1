@@ -17,7 +17,7 @@ public class CreateDSUCImpl implements ICreateDSUC {
     private final Path fileStorageLocation;
     private final IDSRepository dsRepository;
     private DSRequest request;
-    private long result;
+    private long executedRecord;
     private MultipartFile file;
 
     public CreateDSUCImpl(IDSRepository dsRepository, DSRequest documentRequest) throws CommonException {
@@ -76,20 +76,23 @@ public class CreateDSUCImpl implements ICreateDSUC {
 
     @Override
     public ICreateDSUC createDS() {
-        this.result = dsRepository.createDS(request);
+        this.executedRecord = dsRepository.createDS(request);
         return this;
     }
 
     @Override
     public ICreateDSUC fail() throws CommonException {
-        if (result <= 0) {
+        if (executedRecord <= 0) {
             throw new CommonException("Create document storage failed !");
         }
         return this;
     }
 
     @Override
-    public long sendResult() {
-        return result;
+    public String sendResult() {
+        if (executedRecord > 0) {
+            return request.getUploadDir();
+        }
+        return null;
     }
 }
