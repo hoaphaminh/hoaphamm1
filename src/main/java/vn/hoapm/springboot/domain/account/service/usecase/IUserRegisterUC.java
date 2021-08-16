@@ -8,7 +8,7 @@ import vn.hoapm.springboot.domain.account.presentaion.UserResponse;
 public interface IUserRegisterUC {
     IUserRegisterUC applyRequest(UserCUD userCUD);
 
-    IUserRegisterUC validate();
+    IUserRegisterUC validateExisting() throws CommonException;
 
     IUserRegisterUC encodePassword();
 

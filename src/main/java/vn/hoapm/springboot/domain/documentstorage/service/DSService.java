@@ -24,7 +24,7 @@ public class DSService {
         this.idsRepository = idsRepository;
     }
     @Transactional(propagation = Propagation.REQUIRED)
-    public long createDS(DSRequest request, MultipartFile file) throws CommonException {
+    public String createDS(DSRequest request, MultipartFile file) throws CommonException {
         ICreateDSUC iCreateDSUC = new CreateDSUCImpl(idsRepository, DSRequest.builder().uploadDir(uploadDir).build());
         return iCreateDSUC
                 .applyData(request)

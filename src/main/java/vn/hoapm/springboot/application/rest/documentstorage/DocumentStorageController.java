@@ -26,9 +26,9 @@ public class DocumentStorageController {
                 .userId(userId)
                 .docType(docType)
                 .build();
-        APIResponse<Long> apiResponse = new APIResponse<>();
-        Long result = dsService.createDS(dsRequest, file);
-        return apiResponse.sendResponse(result, HttpStatus.OK.value(), "upload.success");
+        APIResponse<String> apiResponse = new APIResponse<>();
+        String uploadDir = dsService.createDS(dsRequest, file);
+        return apiResponse.sendResponse(uploadDir, HttpStatus.OK.value(), "upload.success");
     }
 
 

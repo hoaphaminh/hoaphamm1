@@ -1,5 +1,6 @@
 package vn.hoapm.springboot.application.rest.user;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,12 @@ import vn.hoapm.springboot.domain.account.presentaion.LoginResponse;
 import vn.hoapm.springboot.domain.account.presentaion.UserRequest;
 import vn.hoapm.springboot.domain.account.presentaion.UserResponse;
 import vn.hoapm.springboot.domain.account.service.UserService;
+import vn.hoapm.springboot.domain.documentstorage.presentation.DSRequest;
+import vn.hoapm.springboot.domain.documentstorage.service.DSService;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +38,8 @@ public class UserController {
 
     private UserService userService;
 
+    private DSService dsService;
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -42,6 +49,11 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setDsService(DSService dsService) {
+        this.dsService = dsService;
     }
 
     @GetMapping(USERS + "/{username}")
@@ -73,6 +85,7 @@ public class UserController {
     @PostMapping("/register")
     // register for account with role is USER
     public ResponseEntity<?> register(@RequestBody UserJSONRequest jsonRequest) throws CommonException {
+        jsonRequest.validate();
         jsonRequest.setRoleCode(USER_ROLE);
         UserRequest request = UserJSONMapper.getInstance().fromJsonRequest(jsonRequest);
         UserResponse userResponse = userService.register(request);
@@ -115,13 +128,20 @@ public class UserController {
     }
 
     @PostMapping(USERS + "/import")
-    public ResponseEntity<?> importUsers(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId, @RequestParam("docType") String doctype){
-        // TODO
-//        1. dựa vào thông tin file, userId, doctype tạo 1 request
-//            2. tạo object documentStorage (fileupload....)
-//        3. insert to db
-//                4. base on thông tin truyền vào, sẽ lấy ra đc link file upload, từ đó lấy đc thông tin của file ( các bước 1,2 3 có thể tạo 1 api riêng để sau này upload ảnh)
-        return null;
+    public ResponseEntity<?> importUsers(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId,
+            @RequestParam("docType") String docType) throws
+            CommonException, IOException {
+        DSRequest dsRequest = DSRequest.builder()
+                .userId(userId)
+                .docType(docType)
+                .build();
+        String uploadDir = dsService.createDS(dsRequest, file);
+        List<UserJSONResponse> userJSONResponses = new ArrayList<>();
+        if (Strings.isNotBlank(uploadDir)) {
+            userJSONResponses = userService.importUser(uploadDir);
+        }
+        APIResponse<List<UserJSONResponse>> apiResponse = new APIResponse<>();
+        return apiResponse.sendResponse(userJSONResponses, HttpStatus.OK.value(), "user.success.import");
     }
 
 }

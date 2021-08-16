@@ -3,18 +3,23 @@ package vn.hoapm.springboot.domain.account.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import vn.hoapm.springboot.application.exception.CommonException;
+import vn.hoapm.springboot.application.rest.user.UserJSONResponse;
 import vn.hoapm.springboot.domain.account.presentaion.UserRequest;
 import vn.hoapm.springboot.domain.account.presentaion.UserResponse;
 import vn.hoapm.springboot.domain.account.repository.UserRepository;
 import vn.hoapm.springboot.domain.account.service.impl.UserDeleteUCImpl;
 import vn.hoapm.springboot.domain.account.service.impl.UserGetUCImpl;
+import vn.hoapm.springboot.domain.account.service.impl.UserImportImpl;
 import vn.hoapm.springboot.domain.account.service.impl.UserRegisterUCImpl;
 import vn.hoapm.springboot.domain.account.service.usecase.IUserDeleteUC;
 import vn.hoapm.springboot.domain.account.service.usecase.IUserGetUC;
+import vn.hoapm.springboot.domain.account.service.usecase.IUserImportUC;
 import vn.hoapm.springboot.domain.account.service.usecase.IUserRegisterUC;
+import vn.hoapm.springboot.domain.documentstorage.presentation.DSRequest;
 
-
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -38,7 +43,7 @@ public class UserService {
         IUserRegisterUC iUserRegisterUC = new UserRegisterUCImpl(userRepository);
         return iUserRegisterUC
                 .applyRequest(userRequest.getCud())
-                .validate()
+                .validateExisting()
                 .encodePassword()
                 .createPersonalAccount()
                 .createRoles()
@@ -47,7 +52,7 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<UserResponse> findUsers(UserRequest userRequest){
+    public List<UserResponse> findUsers(UserRequest userRequest) {
         IUserGetUC iUserGetUC = new UserGetUCImpl(userRepository);
         return iUserGetUC
                 .applySearch(userRequest.getUserSearch())
@@ -56,7 +61,7 @@ public class UserService {
                 .endFindUsers();
     }
 
-    @Transactional(propagation =  Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteUser(UserRequest userRequest) {
         IUserDeleteUC iUserDeleteUC = new UserDeleteUCImpl(userRepository);
         return iUserDeleteUC
@@ -65,5 +70,16 @@ public class UserService {
                 .deleteUser()
                 .fail()
                 .getResult();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public  List<UserJSONResponse> importUser(String uploadDir) throws IOException {
+        IUserImportUC userImportUC = new UserImportImpl(userRepository);
+        return userImportUC
+                .getUploadDir(uploadDir)
+                .convertDataInFileToList()
+                .insertBatchUsers()
+                .fail()
+                .result();
     }
 }
