@@ -74,5 +74,6 @@ public class Test {
 //            return s.length()>2;
 //        }).map(String::toUpperCase).limit(3).collect(Collectors.toList());
 //        result.stream().forEach(e-> System.out.println(e));
+
     }
 }

@@ -7,12 +7,11 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
-@Entity
+@Entity(name = "UserInfo")
+@Table(name = "user_infos")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_infos")
 public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

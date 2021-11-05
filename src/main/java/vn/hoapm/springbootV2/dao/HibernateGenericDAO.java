@@ -26,22 +26,13 @@ public abstract class HibernateGenericDAO<D, K extends Serializable> implements 
     @Qualifier("sessionFactory")
     private SessionFactory sessionFactory;
 
-    @Autowired
-    @Qualifier("roSessionFactory")
-    private SessionFactory roSessionFactory;
-
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
 
     public Session getCurrentSession() {
-        SessionFactory sf;
-        try {
-            sf = TransactionSynchronizationManager.hasResource(roSessionFactory) ? roSessionFactory : sessionFactory;
-        } catch (Exception e) {
-            sf = sessionFactory;
-        }
+        SessionFactory sf = sessionFactory;
         return sf.getCurrentSession();
     }
 
@@ -63,7 +54,7 @@ public abstract class HibernateGenericDAO<D, K extends Serializable> implements 
     public List<D> getAll(int offset, int limit) throws CommonException {
         try {
             return this.getCurrentSession()
-                    .createQuery("FROM " + getDomain().getName())
+                    .createQuery("FROM UserInfo ")
                     .setFirstResult(offset)
                     .setMaxResults(limit)
                     .getResultList();

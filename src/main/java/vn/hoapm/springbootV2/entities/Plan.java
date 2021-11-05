@@ -9,7 +9,6 @@ import java.util.Collection;
 
 @Entity
 @Data
-@Builder
 @Table(name = "plans")
 @NoArgsConstructor
 public class Plan implements Serializable {
