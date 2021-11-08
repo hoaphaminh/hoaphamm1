@@ -39,7 +39,7 @@ public class Playlist {
     private Timestamp utimestamp;
 
     @ManyToOne
-    @JoinColumn(name = "userInfo_id")
+    @JoinColumn(name = "userInfo_id", insertable=false, updatable=false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private UserInfo userInfo;

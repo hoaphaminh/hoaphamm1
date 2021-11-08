@@ -42,7 +42,7 @@ public abstract class HibernateGenericDAO<D, K extends Serializable> implements 
     public List<D> getAll() throws CommonException {
         try {
             return this.getCurrentSession()
-                    .createQuery("FROM " + getDomain().getName())
+                    .createQuery("FROM " + getDomain().getSimpleName())
                     .getResultList();
         } catch (Exception e) {
             LOGGER.error("Exception while getting all {}", getDomain().getSimpleName(), e);
@@ -54,7 +54,7 @@ public abstract class HibernateGenericDAO<D, K extends Serializable> implements 
     public List<D> getAll(int offset, int limit) throws CommonException {
         try {
             return this.getCurrentSession()
-                    .createQuery("FROM UserInfo ")
+                    .createQuery("FROM "+getDomain().getSimpleName())
                     .setFirstResult(offset)
                     .setMaxResults(limit)
                     .getResultList();

@@ -1,7 +1,6 @@
 package vn.hoapm.springboot.infrastructure.shared;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,7 +12,6 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = "vn.hoapm")
-@EntityScan(basePackages= { "vn.hoapm.springbootV2.entities"})
 public class InfraConfig {
 
     @Autowired
@@ -30,17 +28,18 @@ public class InfraConfig {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory(){
-        LocalSessionFactoryBean sessionFactory  = new LocalSessionFactoryBean();
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(mySqlDataSource());
+        sessionFactory.setPackagesToScan(ConfigContainer.propertiesPackageScan);
         Properties hibernateProperties = new Properties();
-        hibernateProperties.put("spring.jpa.show-sql",ConfigContainer.propertiesShowSql);
-        hibernateProperties.put("spring.jpa.hibernate.ddl-auto",ConfigContainer.propertiesDDLAuto);
-        hibernateProperties.put("spring.jpa.properties.hibernate.order_inserts",ConfigContainer.propertiesorderInsert);
-        hibernateProperties.put("spring.jpa.properties.hibernate.dialect",ConfigContainer.propertiesDialect);
-        hibernateProperties.put("spring.jpa.properties.hibernate.jdbc.batch_size",ConfigContainer.propertiesBatchSize);
-        hibernateProperties.put("logging.level.org.hibernate.SQL",ConfigContainer.propertiesLevelSQL);
-        hibernateProperties.put("logging.level.org.hibernate.type",ConfigContainer.propertiesLevelType);
+        hibernateProperties.put("spring.jpa.show-sql", ConfigContainer.propertiesShowSql);
+        hibernateProperties.put("spring.jpa.hibernate.ddl-auto", ConfigContainer.propertiesDDLAuto);
+        hibernateProperties.put("spring.jpa.properties.hibernate.order_inserts", ConfigContainer.propertiesorderInsert);
+        hibernateProperties.put("spring.jpa.properties.hibernate.dialect", ConfigContainer.propertiesDialect);
+        hibernateProperties.put("spring.jpa.properties.hibernate.jdbc.batch_size", ConfigContainer.propertiesBatchSize);
+        hibernateProperties.put("logging.level.org.hibernate.SQL", ConfigContainer.propertiesLevelSQL);
+        hibernateProperties.put("logging.level.org.hibernate.type", ConfigContainer.propertiesLevelType);
         sessionFactory.setHibernateProperties(hibernateProperties);
         return sessionFactory;
     }

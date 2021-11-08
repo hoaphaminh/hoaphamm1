@@ -4,17 +4,19 @@ package vn.hoapm.springbootV2.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 
-@Entity(name = "UserInfo")
+@Entity
 @Table(name = "user_infos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo {
+public class UserInfo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // using GenerationType.Auto will using table generator -> performance penanties
     private long id;
 
     @Column(name = "avatar_url")
@@ -63,7 +65,7 @@ public class UserInfo {
     @ToString.Exclude
     private Plan plan;
 
-    @OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userInfo", fetch =FetchType.LAZY ,cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<Playlist> playlists;

@@ -52,18 +52,23 @@ public class ConfigContainer {
     private String levelType;
     public static String propertiesLevelType;
 
+    @Value("${spring.package-scan}")
+    private String packageScan;
+    public static String propertiesPackageScan;
+
     @PostConstruct
     private void init() {
-        this.propertiesDriver = propertiesDriverFile;
-        this.propertiesUrl = propertiesUrlFile;
-        this.propertiesUsername = propertiesUsernameFile;
-        this.propertiesPassword = propertiesPasswordFile;
-        this.propertiesShowSql = showSql;
-        this.propertiesDDLAuto = ddlAuto;
-        this.propertiesorderInsert = orderInsert;
-        this.propertiesDialect = dialect;
-        this.propertiesBatchSize = batchSize;
-        this.propertiesLevelType = levelType;
-        this.propertiesLevelSQL = levelSQL;
+        propertiesDriver = propertiesDriverFile;
+        propertiesUrl = propertiesUrlFile;
+        propertiesUsername = propertiesUsernameFile;
+        propertiesPassword = propertiesPasswordFile;
+        propertiesShowSql = showSql;
+        propertiesDDLAuto = ddlAuto;
+        propertiesorderInsert = orderInsert;
+        propertiesDialect = dialect;
+        propertiesBatchSize = batchSize;
+        propertiesLevelType = levelType;
+        propertiesLevelSQL = levelSQL;
+        propertiesPackageScan = packageScan;
     }
 }

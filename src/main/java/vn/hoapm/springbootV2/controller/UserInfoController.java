@@ -23,7 +23,6 @@ public class UserInfoController {
         this.userInfoFacade = userInfoFacade;
     }
 
-
     @GetMapping("/v2/user_info")
     public ResponseEntity<List<UserInfoDTO>> getUserInfos(
             @RequestParam(value = "offset", defaultValue = CommonConstant.DEFAULT_OFFSET) int offset,

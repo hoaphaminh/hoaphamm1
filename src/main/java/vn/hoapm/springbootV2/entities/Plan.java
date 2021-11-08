@@ -25,7 +25,7 @@ public class Plan implements Serializable {
     @Column(name = "utimestamp")
     private Timestamp utimestamp;
 
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "plan", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     //mappedBy trỏ đến biến plan trong class UserInfo
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
