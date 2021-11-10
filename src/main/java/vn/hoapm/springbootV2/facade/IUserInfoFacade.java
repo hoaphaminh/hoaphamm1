@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IUserInfoFacade {
     List<UserInfoDTO> getUserInforDTOs(int offset, int limit) throws CommonException;
+
+    UserInfoDTO getUserInfoDto(long userInfoId) throws CommonException;
 }

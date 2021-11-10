@@ -16,4 +16,7 @@ public interface GenericDao<D, K extends Serializable> {
 
     List<D> getAll(int offset, int limit) throws CommonException;
 
+    D getById(K id) throws CommonException;
+
+
 }

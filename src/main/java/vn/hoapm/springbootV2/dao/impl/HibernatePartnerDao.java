@@ -13,5 +13,4 @@ public class HibernatePartnerDao extends HibernateGenericDAO<UserInfo, Long> imp
         return UserInfo.class;
     }
 
-
 }
