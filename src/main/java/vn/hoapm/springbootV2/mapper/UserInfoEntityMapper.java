@@ -5,7 +5,7 @@ import vn.hoapm.springbootV2.dto.UserInfoDTO;
 import vn.hoapm.springbootV2.entities.UserInfo;
 
 @Component
-public class UserInfoEntityMapper extends CommonEntityMapper<UserInfo, UserInfoDTO,Long> {
+public class UserInfoEntityMapper extends CommonEntityMapper<UserInfo, UserInfoDTO, Long> {
 
 
     @Override
@@ -18,7 +18,14 @@ public class UserInfoEntityMapper extends CommonEntityMapper<UserInfo, UserInfoD
         return UserInfoDTO.builder()
                 .id(entity.getId())
                 .address(entity.getAddress())
-                //TODO
+                .userId(entity.getUser() != null ? entity.getUser().getId() : null)
+                .gender(entity.getGender())
+                .followerCount(entity.getFollowerCount())
+                .status(entity.getStatus())
+                .followingCount(entity.getFollowingCount())
+                .trackCount(entity.getTrackCount())
+                .playlistCount(entity.getPlaylistCount())
+                .online(entity.getOnline())
                 .build();
     }
 
