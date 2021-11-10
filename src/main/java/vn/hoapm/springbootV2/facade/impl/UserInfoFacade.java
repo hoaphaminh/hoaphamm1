@@ -25,4 +25,10 @@ public class UserInfoFacade implements IUserInfoFacade {
         List<UserInfo> userInfos = userInfoService.getUserInfos(offset, limit);
         return userInfoMapper.mapEntitesToListDTO(userInfos);
     }
+
+    @Override
+    public UserInfoDTO getUserInfoDto(long userInfoId) throws CommonException {
+        UserInfo userInfo = userInfoService.getUserInfo(userInfoId);
+        return userInfoMapper.mapEntityToDTO(userInfo);
+    }
 }

@@ -13,4 +13,9 @@ public class UserInfoService extends AbstractBasedService implements IUserInfoSe
     public List<UserInfo> getUserInfos(int offset, int limit) throws CommonException {
         return daoFactory.getUserInfoDao().getAll(offset, limit);
     }
+
+    @Override
+    public UserInfo getUserInfo(long userInfoId) throws CommonException {
+        return daoFactory.getUserInfoDao().getById(userInfoId);
+    }
 }

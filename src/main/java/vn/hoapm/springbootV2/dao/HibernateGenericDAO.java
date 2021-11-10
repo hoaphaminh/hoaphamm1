@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import vn.hoapm.springboot.application.exception.CommonException;
 
 import java.io.Serializable;
@@ -54,7 +53,7 @@ public abstract class HibernateGenericDAO<D, K extends Serializable> implements 
     public List<D> getAll(int offset, int limit) throws CommonException {
         try {
             return this.getCurrentSession()
-                    .createQuery("FROM "+getDomain().getSimpleName())
+                    .createQuery("FROM " + getDomain().getSimpleName())
                     .setFirstResult(offset)
                     .setMaxResults(limit)
                     .getResultList();
@@ -62,8 +61,25 @@ public abstract class HibernateGenericDAO<D, K extends Serializable> implements 
             LOGGER.error("Exception while getting all {}", getDomain().getSimpleName(), e);
             throw new CommonException("Exception occurs in getAll object", e);
         }
-
     }
 
+
+    @Override
+    public D getById(K id) throws CommonException {
+        return getById(id, getDomain());
+    }
+
+    private D getById(K id, Class<?> c) throws CommonException {
+        if (id == null) {
+            return null;
+        }
+        try {
+            D obj = (D) getCurrentSession().get(c, id);
+            return obj;
+        } catch (Exception e) {
+            LOGGER.debug("Exception occurs on getById", id, e);
+            throw new CommonException("Exception occurs on getById");
+        }
+    }
 
 }
